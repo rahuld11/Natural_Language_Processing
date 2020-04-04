@@ -8,6 +8,7 @@ with open ("G:/LDA/lotr.txt") as lotr:
 import nltk
 import re
 from nltk.tokenize import sent_tokenize 
+from nltk.stem import PorterStemmer
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 
