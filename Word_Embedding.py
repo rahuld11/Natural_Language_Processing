@@ -5,12 +5,36 @@ import numpy as np
 with open ("G:/LDA/lotr.txt") as docs:
     docs = docs.read()
 
+# Cleaning the Data
+import nltk
+import re
+from nltk.tokenize import sent_tokenize 
+from nltk.stem import WordNetLemmatizer
+from nltk.stem import PorterStemmer
+from nltk.corpus import stopwords
+
+ps = PorterStemmer()
+wordnet=WordNetLemmatizer()
+tokenize_sent = sent_tokenize(docs)
+
+corpus=[]
+
+for i in range(len(tokenize_sent)):
+    review = re.sub("[^A-Za-z" "'']+"," ",tokenize_sent[i])
+    review = re.sub("[0-9" "' '-,.]+"," ",tokenize_sent[i])
+    review =review.lower()
+    review = review.split()
+    review = [wordnet.lemmatize(word) for word in review if not word in set(stopwords.words('english'))]
+    review = ' '.join(review)
+    corpus.append(review)
+
 from tensorflow.keras.preprocessing.text import one_hot #One Hot Representation
 
 vocab_size = 10000 ##vocab_size is size of the dictionary (Vocabulary Size)
 
-onehot_repr = [one_hot(words,vocab_size) for words in docs]
+onehot_repr = [one_hot(words,vocab_size) for words in corpus]
 print(onehot_repr)
+onehot_repr[1]
 
 #Word Embedding Representation
 from tensorflow.keras.layers import Embedding
